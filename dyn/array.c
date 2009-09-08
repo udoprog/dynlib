@@ -19,7 +19,7 @@ ds_array_init(ds, dsa)
 
 ds_array_item *
 ds_array_append(dsa, var, dt, n)
-  ds_array        *dsa;
+  ds_array      *dsa;
   void          *var;
   enum dtype    dt;
   size_t        n;
@@ -30,10 +30,11 @@ ds_array_append(dsa, var, dt, n)
   switch (dt)
     {
     // integers have fixed size
-    case Integer: n = sizeof(int);  break;
+    case Integer: n = sizeof(int);    break;
+    case Decimal: n = sizeof(double); break;
     // strings are null terminated, therefore one extra character.
-    case String:  ++n;              break;
-    default:                        break;
+    case String:  ++n;                break;
+    default:                          break;
     }
   
   while (current != NULL)
@@ -56,12 +57,22 @@ ds_array_append(dsa, var, dt, n)
   dsa->da_last = current;
   
   current->dai_prev = prev;
-  current->dai_value = ds_get(dsa->ds, n);
-  current->dai_size  = n;
-  current->dai_next = NULL;
-  current->dai_type = dt;
   
-  memcpy(current->dai_value, var, n);
+  i_size(current) = n;
+  i_type(current) = dt;
+  current->dai_next = NULL;
+  
+  /* store the correct type of value. */
+  switch (dt)
+    {
+    case Integer: i_integer(current) = *((int *)var);     break;
+    case Decimal: i_decimal(current) = *((double *)var);  break;
+    case String:              
+      v_value(i_value(current)).v_pointer = ds_get(dsa->ds, n);
+      memcpy(i_string(current), var, n);
+      break;
+    default:                        break;
+    }
   
   ++dsa->da_size;
   return current;

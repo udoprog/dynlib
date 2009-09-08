@@ -26,6 +26,8 @@ dstore *ds;
     assert(ds->d_state == DS_NORMAL);
     assert(ds->d_pointer != NULL);
     free(ds->d_pointer);
+    ds->d_pointer = NULL;
+    ds->d_state = DS_FREE;
   }
 
 void *

@@ -2,12 +2,18 @@
 #define _DYN_STORE_
 
 #define D_INITIAL_SIZE    1024
-#define D_MAX_SIZE        1048576
+#define D_MAX_SIZE        4294967296
 #define D_REALLOC_FACTOR  2
 
 enum state_t {
+  /** normal mode **/
   DS_NORMAL,
-  DS_STREAM
+  /** used when a store is used as a stream, to block normal operations, since 
+      memory is stupid and continous **/
+  DS_STREAM,
+  /** used when it has been freed, should trigger asserts if you try to use it 
+      after it has been freed **/
+  DS_FREE
 };
 
 #include <sys/types.h>

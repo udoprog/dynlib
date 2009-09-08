@@ -1,5 +1,8 @@
+#include <sys/types.h>
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
+#include <stdlib.h>
 
 #include "dyn/store.h"
 #include "dyn/string.h"
@@ -7,6 +10,10 @@
 
 int main()
   {
+    char *s;
+    int i;
+    
+    /*
     dstore ds;
     ds_init(&ds);
     
@@ -51,18 +58,11 @@ int main()
     ds_array_append(&da, &i, Integer, 0);
     ds_array_append(&da, "test2", String, 5);
     ds_array_append(&da, "abcde", String, 5);
+    double d = 1.01;
+    ds_array_append(&da, &d, Decimal, 0);
     
     ds_array_item *current = NULL;
     
-    ds_array_pop(&da);
-    ds_array_pop(&da);
-    ds_array_pop(&da);
-    ds_array_pop(&da);
-    ds_array_pop(&da);
-    ds_array_pop(&da);
-    ds_array_pop(&da);
-    ds_array_pop(&da);
-    ds_array_pop(&da);
     ds_array_pop(&da);
     ds_array_pop(&da);
     ds_array_pop(&da);
@@ -81,9 +81,48 @@ int main()
         case String:
           printf("string = %s\n", i_string(current));
           break;
+        case Decimal:
+          printf("decimal = %f\n", i_decimal(current));
+          break;
         }
       }
     
     printf("allocated size = %lu\n", ds_size(&ds));
     ds_free(&ds);
+
+
+    */
+    // just for fun, compare allocating 10000 strings to using this...
+    
+    time_t begin = 0;
+    
+    printf("testing strings...\n");
+    begin = time(NULL);
+    
+    for (i = 0; i < 100000000; i++)
+      {
+        s = malloc(sizeof(char) * 17);
+        memcpy(s, "abcdefabcdefabcd", 16);
+        s[16] = '\0';
+        free(s);
+      }
+    
+    printf("malloc time = %lu\n", time(NULL) - begin);
+    
+    dstore ds_s;
+    ds_init(&ds_s);
+    
+    printf("testing strings...\n");
+    begin = time(NULL);
+    
+    for (i = 0; i < 100000000; i++)
+      {
+        s = ds_str_get(&ds_s, 16);
+        memcpy(s, "abcdefabcdefabcd", 16);
+      }
+    
+    printf("dynlib time = %lu\n", time(NULL) - begin);
+    ds_free(&ds_s);
+    
+    sleep(10);
   }

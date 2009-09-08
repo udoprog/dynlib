@@ -4,17 +4,16 @@ PREFIX=/usr/local
 SRC=dyn/store.c
 SRC+=dyn/string.c
 SRC+=dyn/array.c
-#SRC+=main.c
 
 INC=$(PREFIX)/include
 LIB=$(PREFIX)/lib
 
 OBJ=$(SRC:.c=.o)
 
-CFLAGS=-std=gnu99 -pedantic -Wall -Werror -g -I.
+CFLAGS=-std=gnu99 -pedantic -Wall -Werror -O3 -I.
 
 all: $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o test-all
+	$(CC) $(CFLAGS) $(OBJ) main.c -o test-all
 
 static: $(OBJ)
 	ar r libdyn.a $(OBJ)
@@ -24,6 +23,7 @@ static: $(OBJ)
 
 clean:
 	$(RM) $(OBJ)
+	$(RM) libdyn.a
 
 install: static
 	install -m 0755 libdyn.a $(LIB)/libdyn.a

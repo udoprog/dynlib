@@ -1,18 +1,3 @@
-I needed this type of library for a parser I was writing.
-Focus is on:
-  - Memory detention, 0% memory loss (since all objects are allocated in the same space).
-  - Simple, yet dynamic allocation.
-
-Install libdyn (default PREFIX=/usr/local)
-
-make install
-
-Compile Example 1:
-
-gcc example1.c -ldyn
-
-Example 1 (example1.c):
-
 #include <string.h>
 #include <stdio.h>
 

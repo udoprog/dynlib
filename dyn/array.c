@@ -7,24 +7,25 @@
 #include "dyn/store.h"
 
 void
-dsa_init(ds, dsa)
+ds_array_init(ds, dsa)
   dstore *ds;
-  darray *dsa;
+  ds_array *dsa;
 {
   dsa->da_first = NULL;
+  dsa->da_last  = NULL;
   dsa->da_size  = 0;
   dsa->ds       = ds;
 }
 
-darray_item *
-dsa_append(dsa, var, dt, n)
-  darray        *dsa;
+ds_array_item *
+ds_array_append(dsa, var, dt, n)
+  ds_array        *dsa;
   void          *var;
   enum dtype    dt;
   size_t        n;
 {
-  darray_item *prev    = NULL;
-  darray_item *current = dsa->da_first;
+  ds_array_item *prev    = NULL;
+  ds_array_item *current = dsa->da_first;
 
   switch (dt)
     {
@@ -43,12 +44,12 @@ dsa_append(dsa, var, dt, n)
   
   if (prev == NULL)
     {
-      dsa->da_first = ds_get(dsa->ds, sizeof(darray_item));
+      dsa->da_first = ds_get(dsa->ds, sizeof(ds_array_item));
       current = dsa->da_first;
     }
   else
     {
-      prev->dai_next = ds_get(dsa->ds, sizeof(darray_item));
+      prev->dai_next = ds_get(dsa->ds, sizeof(ds_array_item));
       current = prev->dai_next;
     }
   
@@ -66,11 +67,11 @@ dsa_append(dsa, var, dt, n)
   return current;
 }
 
-darray_item *
-dsa_pop(dsa)
-  darray        *dsa;
+ds_array_item *
+ds_array_pop(dsa)
+  ds_array        *dsa;
 {
-  darray_item *last = dsa->da_last;
+  ds_array_item *last = dsa->da_last;
   
   if (last == NULL) 
     {

@@ -17,37 +17,37 @@
 #define i_integer(dai)  (*((int *)i_value(dai)))
 #define i_string(dai)   ((char *)i_value(dai))
 
-#define dsa_size(dsa) ((dsa)->da_size)
+#define ds_array_size(dsa) ((dsa)->da_size)
 
-typedef struct darray_s
+typedef struct ds_array_s
 {
   /* pointer to the first item in the array */
-  struct darray_item_s  *da_first;
+  struct ds_array_item_s  *da_first;
   /* pointer to the last item in the array */
-  struct darray_item_s  *da_last;
+  struct ds_array_item_s  *da_last;
   /* the actual array size */
   int                   da_size;
   /* the storage area for the string */
   dstore                *ds;
 }
-darray;
+ds_array;
 
-typedef struct darray_item_s
+typedef struct ds_array_item_s
 {
-  enum dtype            dai_type;
-  void                  *dai_value;
-  size_t                dai_size;
-  struct darray_item_s  *dai_next;
-  struct darray_item_s  *dai_prev;
-} darray_item;
+  enum dtype              dai_type;
+  void                    *dai_value;
+  size_t                  dai_size;
+  struct ds_array_item_s  *dai_next;
+  struct ds_array_item_s  *dai_prev;
+} ds_array_item;
 
 void
-dsa_init(dstore *, darray *);
+ds_array_init(dstore *, ds_array *);
 
-darray_item *
-dsa_append(darray *, void *, enum dtype, size_t);
+ds_array_item *
+ds_array_append(ds_array *, void *, enum dtype, size_t);
 
-darray_item *
-dsa_pop(darray *);
+ds_array_item *
+ds_array_pop(ds_array *);
 
 #endif /* _DYN_ARRAY_ */

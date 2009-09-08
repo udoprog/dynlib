@@ -47,30 +47,30 @@ size_t
 ds_size(dstore *);
 
 size_t
-dss_size(dstream *);
+ds_stream_size(dstream *);
 
 /**
- * dss_init - Initiate a dynamic storage stream.
+ * ds_stream_init - Initiate a dynamic storage stream.
  * @1 - the dynamic storage to initiate the stream against.
  * @2 - pointer to a stream to initiate.
  */
 dstream *
-dss_init(dstore *, dstream *);
+ds_stream_init(dstore *, dstream *);
 
 /**
- * dss_write - Write data to a dynamic storage stream.
+ * ds_stream_write - Write data to a dynamic storage stream.
  * @1 - the dynamic storage stream which governs the data.
  * @2 - the actual string to write.
  * @3 - the length of the string to write.
  */
 void
-dss_write(dstream *, const char *, size_t);
+ds_stream_write(dstream *, const char *, size_t);
 
 /**
- * dss_close - Close a dynamic storage stream.
+ * ds_stream_close - Close a dynamic storage stream.
  *
  */
 char *
-dss_close(dstream *);
+ds_stream_close(dstream *);
 
 #endif /* _DYN_STORE_ */

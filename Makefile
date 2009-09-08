@@ -27,5 +27,6 @@ clean:
 
 install: static
 	install -m 0755 libdyn.a $(LIB)/libdyn.a
-	install -D -m 0755 dyn/store.h $(INC)/dyn/store.h
+	install -D -m 0755 dyn/var.h 		$(INC)/dyn/var.h
+	install -D -m 0755 dyn/store.h 	$(INC)/dyn/store.h
 	install -D -m 0755 dyn/string.h $(INC)/dyn/string.h

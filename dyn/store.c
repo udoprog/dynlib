@@ -45,14 +45,14 @@ dstore *ds;
   }
 
 size_t
-dss_size(dss)
+ds_stream_size(dss)
 dstream *dss;
   {
     return dss->ss_pos;
   }
 
 dstream *
-dss_init(ds, dss)
+ds_stream_init(ds, dss)
 dstore *ds;
 dstream *dss;
   {
@@ -66,7 +66,7 @@ dstream *dss;
   }
 
 void
-dss_write(dss, c, n)
+ds_stream_write(dss, c, n)
 dstream     *dss;
 const char  *c;
 size_t      n;
@@ -80,7 +80,7 @@ size_t      n;
   }
 
 char *
-dss_close(dss)
+ds_stream_close(dss)
 dstream *dss;
   {
     assert(dss->ds->d_state == DS_STREAM);

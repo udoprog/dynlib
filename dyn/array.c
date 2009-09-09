@@ -5,6 +5,7 @@
 
 #include "dyn/array.h"
 #include "dyn/store.h"
+#include "dyn/var.h"
 
 void
 ds_array_init(ds, dsa)
@@ -27,16 +28,6 @@ ds_array_append(dsa, var, dt, n)
   ds_array_item *prev    = NULL;
   ds_array_item *current = dsa->da_first;
 
-  switch (dt)
-    {
-    // integers have fixed size
-    case Integer: n = sizeof(int);    break;
-    case Decimal: n = sizeof(double); break;
-    // strings are null terminated, therefore one extra character.
-    case String:  ++n;                break;
-    default:                          break;
-    }
-  
   while (current != NULL)
     {
       prev = current;
@@ -57,21 +48,17 @@ ds_array_append(dsa, var, dt, n)
   dsa->da_last = current;
   
   current->dai_prev = prev;
-  
-  i_size(current) = n;
-  i_type(current) = dt;
   current->dai_next = NULL;
+  
+  ds_var_init(dsa->ds, &i_value(current), dt, n);
   
   /* store the correct type of value. */
   switch (dt)
     {
-    case Integer: i_integer(current) = *((int *)var);     break;
-    case Decimal: i_decimal(current) = *((double *)var);  break;
-    case String:              
-      v_value(i_value(current)).v_pointer = ds_get(dsa->ds, n);
-      memcpy(i_string(current), var, n);
-      break;
-    default:                        break;
+    case Integer: i_integer(current) = *((int *)var);           break;
+    case Decimal: i_decimal(current) = *((double *)var);        break;
+    case String: v_string_set(i_value(current), ((char *)var)); break;
+    default: break;
     }
   
   ++dsa->da_size;

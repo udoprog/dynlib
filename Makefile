@@ -4,6 +4,7 @@ PREFIX=/usr/local
 SRC=dyn/store.c
 SRC+=dyn/string.c
 SRC+=dyn/array.c
+SRC+=dyn/var.c
 
 INC=$(PREFIX)/include
 LIB=$(PREFIX)/lib

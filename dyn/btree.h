@@ -18,7 +18,7 @@ do { \
 #define BTREE_COPY_KEY(to, from) \
 do { \
   size_t l = strlen(from); \
-  to = ds_str_get(bt->ds, l); \
+  to = ds_str_get(bt->ds, sizeof(char) * l); \
   strncpy(to, from, l); \
   assert(to != NULL); \
 } while (0)

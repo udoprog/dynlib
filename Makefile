@@ -32,3 +32,16 @@ install: static
 	install -D -m 0755 dyn/var.h 		$(INC)/dyn/var.h
 	install -D -m 0755 dyn/store.h 	$(INC)/dyn/store.h
 	install -D -m 0755 dyn/string.h $(INC)/dyn/string.h
+
+ex1:
+	$(CC) $(CFLAGS) examples/example1.c -o example1 -ldyn
+
+ex2:
+	$(CC) $(CFLAGS) examples/example2.c -o example2 -ldyn
+
+ex3:
+	$(CC) $(CFLAGS) examples/example3.c -o example3 -ldyn
+
+ex4:
+	$(CC) $(CFLAGS) examples/example4.c -o example4 -ldyn
+

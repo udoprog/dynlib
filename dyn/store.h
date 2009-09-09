@@ -1,9 +1,13 @@
 #ifndef _DYN_STORE_
 #define _DYN_STORE_
 
-#define D_INITIAL_SIZE    1024
-#define D_MAX_SIZE        4294967296
-#define D_REALLOC_FACTOR  2
+#include <stdint.h>
+
+#define D_INITIAL_SIZE      1024
+#define D_MAX_SIZE          4294967296
+#define D_REALLOC_FACTOR    2
+#define D_INITIAL_POINTERS  64
+#define D_POINTERS_MAX      64
 
 enum state_t {
   /** normal mode **/
@@ -22,8 +26,12 @@ typedef struct dstore_s
 {
   /* allocation position */
   size_t        d_pos;
+  /* allocation position */
+  size_t        d_palloc;
+  /* the current pointer */
+  size_t        d_ppos;
   /* pointer to memory */
-  void          *d_pointer;
+  int8_t        **d_pointers;
   /* amount allocated */
   size_t        d_alloc;
   /* state, if open as stream for example. */

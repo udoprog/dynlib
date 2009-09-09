@@ -5,13 +5,14 @@ SRC=dyn/store.c
 SRC+=dyn/string.c
 SRC+=dyn/array.c
 SRC+=dyn/var.c
+SRC+=dyn/btree.c
 
 INC=$(PREFIX)/include
 LIB=$(PREFIX)/lib
 
 OBJ=$(SRC:.c=.o)
 
-CFLAGS=-std=gnu99 -pedantic -Wall -Werror -O3 -I.
+CFLAGS=-std=gnu99 -pedantic -Wall -Werror -O3 -I. -g
 
 all: $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) main.c -o test-all

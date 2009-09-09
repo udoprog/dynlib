@@ -3,11 +3,11 @@
 
 #include <stdint.h>
 
-#define D_INITIAL_SIZE      1024
+#define D_INITIAL_SIZE      4096
 #define D_MAX_SIZE          4294967296
 #define D_REALLOC_FACTOR    2
 #define D_INITIAL_POINTERS  64
-#define D_POINTERS_MAX      64
+#define D_POINTERS_MAX      268435456
 
 enum state_t {
   /** normal mode **/

@@ -153,6 +153,7 @@ _ds_get(ds, n)
         if (ds->d_ppos >= ds->d_palloc)
           {
             ds->d_palloc *= D_REALLOC_FACTOR;
+            assert(ds->d_palloc <= D_POINTERS_MAX);
             ds->d_pointers = realloc(ds->d_pointers, ds->d_palloc * sizeof(int8_t *));
           }
         

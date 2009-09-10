@@ -25,7 +25,7 @@ static: $(OBJ)
 
 clean:
 	$(RM) $(OBJ)
-	$(RM) libdyn.a
+	$(RM) libdyn.a example1 example2 example3 example4
 
 install: static
 	install -m 0755 libdyn.a $(LIB)/libdyn.a

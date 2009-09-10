@@ -10,6 +10,7 @@
 
 // internal functions
 void * _ds_get(dstore *, size_t);
+void *_ds_put_more(dstore *ds, const void *d, size_t n);
 
 void
 _ds_init_current_pointer(ds)
@@ -87,13 +88,29 @@ ds_stream_init(ds, dss)
   dstore *ds;
   dstream *dss;
 {
-  assert(0 == 1);
+  assert(ds->d_state == DS_NORMAL);
+  
+  // reset pointer if it's not a block of zero
+  if (ds->d_pos != 0)
+  {
+    ++ds->d_ppos;
+    
+    if (ds->d_ppos >= ds->d_palloc)
+      {
+        ds->d_palloc *= D_REALLOC_FACTOR;
+        assert(ds->d_palloc <= D_POINTERS_MAX);
+        ds->d_pointers = realloc(ds->d_pointers, ds->d_palloc * sizeof(int8_t *));
+      }
+    
+    _ds_init_current_pointer(ds);
+  }
+  
   dss->ds = ds;
-  dss->ss_pointer = (char *)current_pointer(ds) + ds->d_pos;
+  dss->ss_pointer = NULL;
   dss->ss_pos = 0;
   dss->ss_closed = 0;
   
-  ds->d_state = DS_STREAM;
+  dss->ds->d_state = DS_STREAM;
   return dss;
 }
 
@@ -103,12 +120,10 @@ ds_stream_write(dss, c, n)
   const char  *c;
   size_t      n;
 {
-  assert(0 == 1);
   assert(dss->ds->d_state == DS_STREAM);
   assert(dss->ss_closed == 0);
   
-  char *b = _ds_get(dss->ds, n);
-  memcpy(b, c, n);
+  dss->ss_pointer = _ds_put_more(dss->ds, c, n);
   dss->ss_pos += n;
 }
 
@@ -116,14 +131,14 @@ char *
 ds_stream_close(dss)
   dstream *dss;
 {
-  assert(0 == 1);
   assert(dss->ds->d_state == DS_STREAM);
-  dss->ds->d_state = DS_NORMAL;
   assert(dss->ss_closed == 0);
+  
   dss->ss_closed = 1;
   
-  char *c = ds_get(dss->ds, 1);
-  *c = '\0';
+  dss->ss_pointer = _ds_put_more(dss->ds, "\0", 1);
+  dss->ds->d_state = DS_NORMAL;
+  dss->ds->d_pos += dss->ss_pos;
   return dss->ss_pointer;
 }
 
@@ -166,4 +181,26 @@ _ds_get(ds, n)
   
   bzero(build, n);
   return build;
+}
+
+void *
+_ds_put_more(ds, d, n)
+  dstore *ds;
+  const void *d;
+  size_t n;
+{
+  assert(ds->d_pointers != NULL);
+  
+  while (ds->d_pos + n >= ds->d_alloc)
+    {
+      ds->d_alloc *= D_REALLOC_FACTOR;
+      assert(ds->d_alloc <= D_MAX_SIZE);
+      current_pointer(ds) = realloc(current_pointer(ds), ds->d_alloc * sizeof(int8_t));
+      assert(current_pointer(ds) != NULL);
+    }
+  
+  memcpy(((int8_t *)current_pointer(ds) + ds->d_pos), d, n);
+  ds->d_pos += n;
+  
+  return current_pointer(ds);
 }

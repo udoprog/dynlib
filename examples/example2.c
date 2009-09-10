@@ -52,5 +52,7 @@ _test_streams()
 
 int main()
 {
+  printf("test unique streams... ");
   _test_streams();
+  printf("OK!\n");
 }

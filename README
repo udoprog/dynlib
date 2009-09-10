@@ -3,52 +3,20 @@ Focus is on:
   - Memory detention, 0% memory loss (since all objects are allocated in the same space).
   - Simple, yet dynamic allocation.
 
-Install libdyn (default PREFIX=/usr/local)
+Install libdyn (default PREFIX=/usr/local, which means you must be root or priviliged)
 
 make install
 
 Compile Example 1:
 
-gcc example1.c -ldyn
+make ex1
 
-Example 1 (example1.c):
+then run it:
 
-#include <string.h>
-#include <stdio.h>
+./example1
 
-#include "dyn/store.h"
+And please... test it for memory leaks
 
-int main()
-{
-  dstore ds;
-  ds_init(&ds);
-  
-  char *str = ds_get(&ds, 100);
-  
-  strcpy(str, "this is a test string");
-  
-  printf("str = %s\n", str);
-  
-  printf("memory usage (more is pre-allocated) = %d\n", ds_size(&ds));
-  
-  ds_free(&ds); // the string is freed here.
-  
-  dstore ds2;
-  dstream dss;
-  
-  ds_init(&ds2);
-  ds_stream_init(&ds2, &dss);
-  
-  ds_stream_write(&dss, "test1", 5);
-  ds_stream_write(&dss, "test2", 5);
-  ds_stream_write(&dss, "test3", 5);
-  
-  // must close
-  char *final_string = ds_stream_close(&dss);
-  
-  printf("final_string = %s\n", final_string);
+valgrind ./example1
 
-  printf("memory usage (more is pre-allocated) = %d\n", ds_size(&ds2));
-  
-  ds_free(&ds2); // final_string is release here
-}
+And so on for example[1-4]

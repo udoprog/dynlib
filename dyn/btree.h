@@ -59,7 +59,10 @@ void
 btree_rotate_left(btree *, node *n);
 
 unsigned int
-btree_height(node *, unsigned int);
+btree_height(node *);
+
+unsigned int
+btree_count(node *);
 
 void
 btree_printf(node *, int);

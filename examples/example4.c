@@ -47,7 +47,10 @@ _test_storage()
       assert(v_integer(*found->value) == 1002);
     }
   
-  printf(", height = %u", btree_height(tree.root, 0));
+  printf(", height = %u", btree_height(tree.root));
+  printf(", count = %u", btree_count(tree.root));
+  assert(btree_count(tree.root));
+  
   ds_free(&ds);
 }
 

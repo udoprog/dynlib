@@ -334,19 +334,23 @@ btree_find(bt, key)
 }
 
 unsigned int
-btree_height(n, height)
+btree_height(n)
   node *n;
-  unsigned int height;
 {
-  unsigned int c_l = height, c_r = height;
+  if (n == NULL)
+    return 0;
   
-  if (n->left != NULL)
-    c_l = btree_height(n->left, height + 1);
+  unsigned int c_l = btree_height(n->left),
+               c_r = btree_height(n->right);
   
-  if (n->right != NULL)
-    c_r = btree_height(n->right, height + 1);
-  
-  return c_l > c_r ? c_l : c_r;
+  return (c_l > c_r ? c_l : c_r) + 1;
+}
+
+unsigned int
+btree_count(n)
+  node *n;
+{
+  return (n == NULL ? 0 : btree_count(n->left) + btree_count(n->right) + 1);
 }
 
 void

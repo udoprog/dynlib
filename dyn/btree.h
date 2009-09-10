@@ -12,7 +12,6 @@
 #define BTREE_KEY_CMP(v1, v2, result) \
 do { \
   result = strcmp(v1, v2); \
-  if (result == 0) printf("found equal!\n"); \
 } while(0)
 
 #define BTREE_COPY_KEY(to, from) \
@@ -58,6 +57,9 @@ btree_rotate_right(btree *, node *n);
 
 void
 btree_rotate_left(btree *, node *n);
+
+unsigned int
+btree_height(node *, unsigned int);
 
 void
 btree_printf(node *, int);

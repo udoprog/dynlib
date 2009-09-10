@@ -10,7 +10,7 @@ void
 _test_allocation()
 {
   dstore ds;
-  int grow = D_INITIAL_SIZE / PARTIAL;
+  int grow = D_SIZE_INITIAL / PARTIAL;
   char *str;
   
   ds_init(&ds);
@@ -31,7 +31,7 @@ _test_strings()
 {
   char *str;
   int i = 0;
-  int grow = D_INITIAL_SIZE / PARTIAL;
+  int grow = D_SIZE_INITIAL / PARTIAL;
   
   dstore ds;
   
@@ -57,10 +57,10 @@ _test_uneven()
   
   ds_init(&ds);
   
-  for (i = 0; i < D_INITIAL_SIZE; i++)
+  for (i = 0; i < D_SIZE_INITIAL; i++)
     {
-      str = ds_get(&ds, D_INITIAL_SIZE - i);
-      memset(str, 0x0, D_INITIAL_SIZE - i);
+      str = ds_get(&ds, D_SIZE_INITIAL - i);
+      memset(str, 0x0, D_SIZE_INITIAL - i);
     }
   
   ds_free(&ds);

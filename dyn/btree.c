@@ -333,6 +333,22 @@ btree_find(bt, key)
   return NULL;
 }
 
+unsigned int
+btree_height(n, height)
+  node *n;
+  unsigned int height;
+{
+  unsigned int c_l = height, c_r = height;
+  
+  if (n->left != NULL)
+    c_l = btree_height(n->left, height + 1);
+  
+  if (n->right != NULL)
+    c_r = btree_height(n->right, height + 1);
+  
+  return c_l > c_r ? c_l : c_r;
+}
+
 void
 btree_printf(n, depth)
   node *n;

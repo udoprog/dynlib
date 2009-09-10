@@ -3,11 +3,15 @@
 
 #include <stdint.h>
 
-#define D_INITIAL_SIZE      4096
-#define D_MAX_SIZE          4294967296
-#define D_REALLOC_FACTOR    2
-#define D_INITIAL_POINTERS  64
+#define D_SIZE_INITIAL      4096
+#define D_SIZE_MAX          4294967296
+#define D_POINTERS_INITIAL  64
 #define D_POINTERS_MAX      268435456
+
+#define D_REALLOC_FACTOR    2
+/* this is the unit in which memory is allocated, therefore
+ * sizeof(D_MEMORY_TYPE) is the smallest possible allocation */
+#define D_MEMORY_TYPE       int8_t
 
 enum state_t {
   /** normal mode **/
@@ -31,7 +35,7 @@ typedef struct dstore_s
   /* the current pointer */
   size_t        d_ppos;
   /* pointer to memory */
-  int8_t        **d_pointers;
+  D_MEMORY_TYPE **d_pointers;
   /* amount allocated */
   size_t        d_alloc;
   /* state, if open as stream for example. */

@@ -9,29 +9,34 @@
 #define current_pointer(ds) (ds)->d_pointers[(ds)->d_ppos]
 
 // internal functions
-void * _ds_get(dstore *, size_t);
+
+/**
+ * The backbone of ds_get.
+ */
+void *_ds_get(dstore *, size_t);
+
+/**
+ * Makes sure that it only uses the top memory pointer and expands it when necessary.
+ * Used for streams.
+ */
 void *_ds_put_more(dstore *ds, const void *d, size_t n);
 
-void
-_ds_init_current_pointer(ds)
-  dstore *ds;
-{
-  assert(ds->d_state == DS_NORMAL);
-  ds->d_pos           = 0;
-  ds->d_alloc         = D_INITIAL_SIZE;
-  
-  current_pointer(ds) = malloc(ds->d_alloc * sizeof(int8_t));
-}
+/**
+ * Initiates the current pointer and prepares it for memory writing.
+ * Expands the list of pointers when necessary.
+ */
+void _ds_init_current_pointer(dstore *ds);
 
 void
 ds_init(ds)
   dstore *ds;
 {
   ds->d_state     = DS_NORMAL;
-  ds->d_palloc    = D_INITIAL_POINTERS;
-  ds->d_ppos      = 0;
-  ds->d_pointers  = malloc(ds->d_palloc * sizeof(int8_t *));
+  ds->d_palloc    = D_POINTERS_INITIAL;
+  ds->d_pointers  = malloc(ds->d_palloc * sizeof(D_MEMORY_TYPE *));
   
+  // set the initial pointer.
+  ds->d_ppos      = 0;
   _ds_init_current_pointer(ds);
 }
 
@@ -93,15 +98,8 @@ ds_stream_init(ds, dss)
   // reset pointer if it's not a block of zero
   if (ds->d_pos != 0)
   {
+    // use the next pointer.
     ++ds->d_ppos;
-    
-    if (ds->d_ppos >= ds->d_palloc)
-      {
-        ds->d_palloc *= D_REALLOC_FACTOR;
-        assert(ds->d_palloc <= D_POINTERS_MAX);
-        ds->d_pointers = realloc(ds->d_pointers, ds->d_palloc * sizeof(int8_t *));
-      }
-    
     _ds_init_current_pointer(ds);
   }
   
@@ -157,26 +155,19 @@ _ds_get(ds, n)
       if (ds->d_pos == 0)
       {
         ds->d_alloc *= D_REALLOC_FACTOR;
-        assert(ds->d_alloc <= D_MAX_SIZE);
-        current_pointer(ds) = realloc(current_pointer(ds), ds->d_alloc * sizeof(int8_t));
+        assert(ds->d_alloc <= D_SIZE_MAX);
+        current_pointer(ds) = realloc(current_pointer(ds), ds->d_alloc * sizeof(D_MEMORY_TYPE));
         assert(current_pointer(ds) != NULL);
       }
       else
       {
+        // use the next pointer.
         ++ds->d_ppos;
-        
-        if (ds->d_ppos >= ds->d_palloc)
-          {
-            ds->d_palloc *= D_REALLOC_FACTOR;
-            assert(ds->d_palloc <= D_POINTERS_MAX);
-            ds->d_pointers = realloc(ds->d_pointers, ds->d_palloc * sizeof(int8_t *));
-          }
-        
         _ds_init_current_pointer(ds);
       }
     }
   
-  build     = ((int8_t *)current_pointer(ds) + ds->d_pos);
+  build     = ((D_MEMORY_TYPE *)current_pointer(ds) + ds->d_pos);
   ds->d_pos += n;
   
   bzero(build, n);
@@ -194,13 +185,33 @@ _ds_put_more(ds, d, n)
   while (ds->d_pos + n >= ds->d_alloc)
     {
       ds->d_alloc *= D_REALLOC_FACTOR;
-      assert(ds->d_alloc <= D_MAX_SIZE);
-      current_pointer(ds) = realloc(current_pointer(ds), ds->d_alloc * sizeof(int8_t));
+      assert(ds->d_alloc <= D_SIZE_MAX);
+      current_pointer(ds) = realloc(current_pointer(ds), ds->d_alloc * sizeof(D_MEMORY_TYPE));
       assert(current_pointer(ds) != NULL);
     }
   
-  memcpy(((int8_t *)current_pointer(ds) + ds->d_pos), d, n);
+  memcpy(((D_MEMORY_TYPE *)current_pointer(ds) + ds->d_pos), d, n);
   ds->d_pos += n;
   
   return current_pointer(ds);
 }
+
+void
+_ds_init_current_pointer(ds)
+  dstore *ds;
+{
+  assert(ds->d_state == DS_NORMAL);
+  
+  if (ds->d_ppos >= ds->d_palloc)
+    {
+      ds->d_palloc *= D_REALLOC_FACTOR;
+      assert(ds->d_palloc <= D_POINTERS_MAX);
+      ds->d_pointers = realloc(ds->d_pointers, ds->d_palloc * sizeof(D_MEMORY_TYPE *));
+    }
+  
+  ds->d_pos           = 0;
+  ds->d_alloc         = D_SIZE_INITIAL;
+  
+  current_pointer(ds) = malloc(ds->d_alloc * sizeof(D_MEMORY_TYPE));
+}
+

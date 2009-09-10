@@ -1,12 +1,16 @@
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
 
 #include "dyn/store.h"
 #include "dyn/btree.h"
 #include "dyn/var.h"
+
+#define NODES 10000000
+#define KEY   "\xaa\xbb\xcc%d\xaa\xbb\xcc%d"
   
-int
-main()
+void
+_test_storage()
 {
   dstore ds;
   btree tree;
@@ -20,25 +24,39 @@ main()
   int i = 0;
   char s[100];
 
-  for (i = 0; i < 1000000; i++)
+  node *found = NULL;
+  
+  printf(" building");
+  fflush(stdout);
+  for (i = 0; i < NODES; i++)
     {
-      sprintf(s, "test%d", i);
+      sprintf(s, KEY, i, NODES - i);
       btree_insert(&tree, s, &test);
     }
   
+  // increment the shared integer.
   v_integer(test)++;
   
-  //btree_printf(tree.root, 0);
-  //printf("\n");
-  //
+  printf(", checking");
+  fflush(stdout);
+  for (i = 0; i < NODES; i++)
+    {
+      sprintf(s, KEY, i, NODES - i);
+      found = btree_find(&tree, s);
+      assert(found != NULL);
+      assert(v_integer(*found->value) == 1002);
+    }
   
-  printf("memory usage = %zu\n", ds_size(&ds));
-  
-  printf("== %d \n", v_integer(*btree_find(&tree, "test1")->value));
-  printf("== %d \n", v_integer(*btree_find(&tree, "test2")->value));
-  printf("== %d \n", v_integer(*btree_find(&tree, "test3")->value));
-  printf("== %d \n", v_integer(*btree_find(&tree, "test4")->value));
-  
+  printf(", height = %u", btree_height(tree.root, 0));
   ds_free(&ds);
+}
+
+int
+main()
+{
+  printf("Testing binary tree persitency (%d nodes, please wait)...", NODES);
+  fflush(stdout);
+  _test_storage();
+  printf(", OK!\n");
   return 0;
 }

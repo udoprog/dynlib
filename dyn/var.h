@@ -5,7 +5,14 @@
 
 #include "dyn/store.h"
 
+/**
+ * v_value - get the value of the variable.
+ */
 #define v_value(dv)     ((dv).dv_value)
+
+/**
+ * v_size - determine the size of the variable.
+ */
 #define v_size(dv)      ((dv).dv_size)
 
 /**
@@ -41,7 +48,10 @@
   strncpy(v_pointer(dv), str, v_size(dv)); \
 } while(0)
 
-#define v_string_len(dv) (v_size(dv) - 1)
+/**
+ * v_string_size - Get the size of a string variable.
+ */
+#define v_string_size(dv) (v_size(dv) - 1)
 
 enum dtype
 {

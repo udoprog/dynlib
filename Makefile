@@ -45,3 +45,5 @@ ex3:
 ex4:
 	$(CC) $(CFLAGS) examples/example4.c -o example4 -ldyn
 
+ex5:
+	$(CC) $(CFLAGS) examples/example5.c -o example5 -ldyn

@@ -3,18 +3,18 @@
 
 #include "dyn/store.h"
 
-typedef struct dstring_s
+typedef struct d_string_s
 {
   /* pointer to the actual string */
   char    *s_pointer;
   /* the actual string length */
   int     s_length;
   /* the storage area for the string */
-  dstore  *ds;
+  d_store  *ds;
 }
-dstring;
+d_string;
 
 char *
-ds_str_get(dstore *, size_t n);
+d_store_str_get(d_store *, size_t n);
 
 #endif /* _DYN_STRING_ */

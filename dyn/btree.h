@@ -7,7 +7,7 @@
 
 #define repr(n)         (n == NULL ? "<null>" : "<int>")
 
-#define BTREE_VALUE_TYPE dvar *
+#define BTREE_VALUE_TYPE d_var *
 #define BTREE_KEY_TYPE   char *
 #define BTREE_KEY_CMP(v1, v2, result) \
 do { \
@@ -17,7 +17,7 @@ do { \
 #define BTREE_COPY_KEY(to, from) \
 do { \
   size_t l = strlen(from); \
-  to = ds_str_get(bt->ds, sizeof(char) * l); \
+  to = d_store_str_get(bt->ds, sizeof(char) * l); \
   strncpy(to, from, l); \
   assert(to != NULL); \
 } while (0)
@@ -40,11 +40,11 @@ typedef struct node_s
 typedef struct btree_s
 {
   struct node_s *root;
-  dstore        *ds;
+  d_store        *ds;
 } btree;
 
 void
-btree_init(dstore *, btree *bt);
+btree_init(d_store *, btree *bt);
 
 node *
 btree_insert(btree *bt, BTREE_KEY_TYPE key, BTREE_VALUE_TYPE value);

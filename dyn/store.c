@@ -11,25 +11,25 @@
 // internal functions
 
 /**
- * The backbone of ds_get.
+ * The backbone of d_store_get.
  */
-void *_ds_get(dstore *, size_t);
+void *_ds_get(d_store *, size_t);
 
 /**
  * Makes sure that it only uses the top memory pointer and expands it when necessary.
  * Used for streams.
  */
-void *_ds_put_more(dstore *ds, const void *d, size_t n);
+void *_ds_put_more(d_store *ds, const void *d, size_t n);
 
 /**
  * Initiates the current pointer and prepares it for memory writing.
  * Expands the list of pointers when necessary.
  */
-void _ds_init_current_pointer(dstore *ds);
+void _d_store_init_current_pointer(d_store *ds);
 
 void
-ds_init(ds)
-  dstore *ds;
+d_store_init(ds)
+  d_store *ds;
 {
   ds->d_state     = DS_NORMAL;
   ds->d_palloc    = D_POINTERS_INITIAL;
@@ -37,12 +37,12 @@ ds_init(ds)
   
   // set the initial pointer.
   ds->d_ppos      = 0;
-  _ds_init_current_pointer(ds);
+  _d_store_init_current_pointer(ds);
 }
 
 void
-ds_free(ds)
-  dstore *ds;
+d_store_free(ds)
+  d_store *ds;
 {
   int i = 0;
   
@@ -66,8 +66,8 @@ ds_free(ds)
 }
 
 void *
-ds_get(ds, n)
-  dstore *ds;
+d_store_get(ds, n)
+  d_store *ds;
   size_t n;
 {
   assert(ds->d_state == DS_NORMAL);
@@ -75,22 +75,22 @@ ds_get(ds, n)
 }
 
 size_t
-ds_size(ds)
-  dstore *ds;
+d_store_size(ds)
+  d_store *ds;
 {
   return ds->d_pos;
 }
 
 size_t
-ds_stream_size(dss)
+d_store_stream_size(dss)
   dstream *dss;
 {
   return dss->ss_pos;
 }
 
 dstream *
-ds_stream_init(ds, dss)
-  dstore *ds;
+d_store_stream_init(ds, dss)
+  d_store *ds;
   dstream *dss;
 {
   assert(ds->d_state == DS_NORMAL);
@@ -100,7 +100,7 @@ ds_stream_init(ds, dss)
   {
     // use the next pointer.
     ++ds->d_ppos;
-    _ds_init_current_pointer(ds);
+    _d_store_init_current_pointer(ds);
   }
   
   dss->ds = ds;
@@ -113,7 +113,7 @@ ds_stream_init(ds, dss)
 }
 
 void
-ds_stream_write(dss, c, n)
+d_store_stream_write(dss, c, n)
   dstream     *dss;
   const char  *c;
   size_t      n;
@@ -126,7 +126,7 @@ ds_stream_write(dss, c, n)
 }
 
 char *
-ds_stream_close(dss)
+d_store_stream_close(dss)
   dstream *dss;
 {
   assert(dss->ds->d_state == DS_STREAM);
@@ -143,7 +143,7 @@ ds_stream_close(dss)
 // internal
 void *
 _ds_get(ds, n)
-  dstore *ds;
+  d_store *ds;
   size_t n;
 {
   void *build = NULL;
@@ -163,7 +163,7 @@ _ds_get(ds, n)
       {
         // use the next pointer.
         ++ds->d_ppos;
-        _ds_init_current_pointer(ds);
+        _d_store_init_current_pointer(ds);
       }
     }
   
@@ -176,7 +176,7 @@ _ds_get(ds, n)
 
 void *
 _ds_put_more(ds, d, n)
-  dstore *ds;
+  d_store *ds;
   const void *d;
   size_t n;
 {
@@ -197,8 +197,8 @@ _ds_put_more(ds, d, n)
 }
 
 void
-_ds_init_current_pointer(ds)
-  dstore *ds;
+_d_store_init_current_pointer(ds)
+  d_store *ds;
 {
   assert(ds->d_state == DS_NORMAL);
   

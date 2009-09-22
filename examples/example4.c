@@ -12,13 +12,13 @@
 void
 _test_storage()
 {
-  dstore ds;
+  d_store ds;
   btree tree;
 
-  ds_init(&ds);
+  d_store_init(&ds);
   btree_init(&ds, &tree);
 
-  dvar test;
+  d_var test;
   v_integer(test) = 1001;
   
   int i = 0;
@@ -51,7 +51,7 @@ _test_storage()
   printf(", count = %u", btree_count(tree.root));
   assert(btree_count(tree.root));
   
-  ds_free(&ds);
+  d_store_free(&ds);
 }
 
 int

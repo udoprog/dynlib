@@ -21,11 +21,11 @@ _test_streams()
   int i = 0;
   char prototype[100];
   
-  dstore ds;
-  ds_init(&ds);
+  d_store ds;
+  d_store_init(&ds);
   
   dstream dss;
-  ds_stream_init(&ds, &dss);
+  d_store_stream_init(&ds, &dss);
   
   size_t s_l = 0;
   
@@ -33,10 +33,10 @@ _test_streams()
     {
       sprintf(prototype, PROTOTYPE, i, LIMIT - i);
       s_l = strlen(prototype);
-      ds_stream_write(&dss, prototype, s_l);
+      d_store_stream_write(&dss, prototype, s_l);
     }
   
-  char *pss_str = ds_stream_close(&dss);
+  char *pss_str = d_store_stream_close(&dss);
   size_t pos = 0;
   
   for (i = 0; i < LIMIT; i++)
@@ -47,7 +47,7 @@ _test_streams()
       pos += s_l;
     }
   
-  ds_free(&ds);
+  d_store_free(&ds);
 }
 
 int main()

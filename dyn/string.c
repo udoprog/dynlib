@@ -4,10 +4,10 @@
 #include "dyn/string.h"
 
 char *
-ds_str_get(ds, n)
-dstore  *ds;
+d_store_str_get(ds, n)
+d_store  *ds;
 size_t n;
   {
-    char *str_build = ds_get(ds, n+1);
+    char *str_build = d_store_get(ds, n+1);
     return str_build;
   }

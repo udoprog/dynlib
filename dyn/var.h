@@ -21,22 +21,22 @@
 #define v_type(dv)      ((dv).dv_type)
 
 /**
- * v_integer - Fetch the integer value from a ds_array_item.
+ * v_integer - Fetch the integer value from a d_store_array_item.
  */
 #define v_integer(dv)  (v_value(dv).v_int)
 
 /**
- * v_decimal - Fetch the decimal value from a ds_array_item.
+ * v_decimal - Fetch the decimal value from a d_store_array_item.
  */
 #define v_decimal(dv)  (v_value(dv).v_decimal)
 
 /**
- * v_string - Fetch the string value from a ds_array_item.
+ * v_string - Fetch the string value from a d_store_array_item.
  */
 #define v_string(dv)   ((char *)(v_value(dv).v_pointer))
 
 /**
- * v_pointer - Fetch the pointer part of the dvar.
+ * v_pointer - Fetch the pointer part of the d_var.
  */
 #define v_pointer(dv)   ((v_value(dv).v_pointer))
 
@@ -60,7 +60,7 @@ enum dtype
   Decimal
 };
 
-typedef struct dvar_s
+typedef struct d_var_s
 {
   enum dtype              dv_type;
   union {
@@ -86,9 +86,9 @@ typedef struct dvar_s
    * dv_size - Size of storage.
    */
   size_t                  dv_size;
-} dvar;
+} d_var;
 
 void
-ds_var_init(dstore *ds, dvar *dv, enum dtype dt, size_t n);
+d_var_init(d_store *ds, d_var *dv, enum dtype dt, size_t n);
 
 #endif /* _DYN_VAR_ */

@@ -29,7 +29,7 @@ _btree_node_alloc(btree *bt, BTREE_KEY_TYPE key, BTREE_VALUE_TYPE value);
 
 void
 btree_init(ds, bt)
-  dstore      *ds;
+  d_store      *ds;
   btree       *bt;
 {
   bt->root = NULL;
@@ -136,7 +136,7 @@ _btree_node_alloc(bt, key, value)
   BTREE_KEY_TYPE    key;
   BTREE_VALUE_TYPE  value;
 {
-  node *n = ds_get(bt->ds, sizeof(node));
+  node *n = d_store_get(bt->ds, sizeof(node));
   // assert we are not out of memory
   assert(n != NULL);
   

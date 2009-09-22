@@ -12,15 +12,15 @@
 void
 _test_arrays()
 {
-  dstore ds;
-  ds_array da;
-  ds_array_item *current;
+  d_store ds;
+  d_store_array da;
+  d_store_array_item *current;
   int i;
 
   char prototype[100];
   
-  ds_init(&ds);
-  ds_array_init(&ds, &da);
+  d_store_init(&ds);
+  d_store_array_init(&ds, &da);
   
   printf(" building array");
   fflush(stdin);
@@ -28,7 +28,7 @@ _test_arrays()
   {
     memset(prototype, 0x0, 100);
     sprintf(prototype, PROTOTYPE, i, LIMIT - i);
-    ds_array_append(&da, prototype, String, strlen(prototype));
+    d_store_array_append(&da, prototype, String, strlen(prototype));
   }
   
   printf(", checking array");
@@ -42,7 +42,7 @@ _test_arrays()
     ++i;
   }
   
-  ds_free(&ds);
+  d_store_free(&ds);
 }
 
 int main()

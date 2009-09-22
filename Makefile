@@ -6,6 +6,7 @@ SRC+=dyn/string.c
 SRC+=dyn/array.c
 SRC+=dyn/var.c
 SRC+=dyn/btree.c
+SRC+=dyn/ringbuffer.c
 
 INC=$(PREFIX)/include
 LIB=$(PREFIX)/lib
@@ -29,9 +30,10 @@ clean:
 
 install: static
 	install -m 0755 libdyn.a $(LIB)/libdyn.a
-	install -D -m 0755 dyn/var.h 		$(INC)/dyn/var.h
-	install -D -m 0755 dyn/store.h 	$(INC)/dyn/store.h
-	install -D -m 0755 dyn/string.h $(INC)/dyn/string.h
+	install -D -m 0755 dyn/var.h 					$(INC)/dyn/var.h
+	install -D -m 0755 dyn/store.h 				$(INC)/dyn/store.h
+	install -D -m 0755 dyn/string.h 			$(INC)/dyn/string.h
+	install -D -m 0755 dyn/ringbuffer.h 	$(INC)/dyn/ringbuffer.h
 
 ex1:
 	$(CC) $(CFLAGS) examples/example1.c -o example1 -ldyn

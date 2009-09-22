@@ -8,9 +8,9 @@
 #include "dyn/var.h"
 
 void
-ds_array_init(ds, dsa)
-  dstore *ds;
-  ds_array *dsa;
+d_store_array_init(ds, dsa)
+  d_store *ds;
+  d_store_array *dsa;
 {
   dsa->da_first = NULL;
   dsa->da_last  = NULL;
@@ -18,15 +18,15 @@ ds_array_init(ds, dsa)
   dsa->ds       = ds;
 }
 
-ds_array_item *
-ds_array_append(dsa, var, dt, n)
-  ds_array      *dsa;
+d_store_array_item *
+d_store_array_append(dsa, var, dt, n)
+  d_store_array      *dsa;
   void          *var;
   enum dtype    dt;
   size_t        n;
 {
-  ds_array_item *prev    = NULL;
-  ds_array_item *current = dsa->da_first;
+  d_store_array_item *prev    = NULL;
+  d_store_array_item *current = dsa->da_first;
 
   while (current != NULL)
     {
@@ -36,12 +36,12 @@ ds_array_append(dsa, var, dt, n)
   
   if (prev == NULL)
     {
-      dsa->da_first = ds_get(dsa->ds, sizeof(ds_array_item));
+      dsa->da_first = d_store_get(dsa->ds, sizeof(d_store_array_item));
       current = dsa->da_first;
     }
   else
     {
-      prev->dai_next = ds_get(dsa->ds, sizeof(ds_array_item));
+      prev->dai_next = d_store_get(dsa->ds, sizeof(d_store_array_item));
       current = prev->dai_next;
     }
   
@@ -50,7 +50,7 @@ ds_array_append(dsa, var, dt, n)
   current->dai_prev = prev;
   current->dai_next = NULL;
   
-  ds_var_init(dsa->ds, &i_value(current), dt, n);
+  d_var_init(dsa->ds, &i_value(current), dt, n);
   
   /* store the correct type of value. */
   switch (dt)
@@ -65,11 +65,11 @@ ds_array_append(dsa, var, dt, n)
   return current;
 }
 
-ds_array_item *
-ds_array_pop(dsa)
-  ds_array        *dsa;
+d_store_array_item *
+d_store_array_pop(dsa)
+  d_store_array        *dsa;
 {
-  ds_array_item *last = dsa->da_last;
+  d_store_array_item *last = dsa->da_last;
   
   if (last == NULL) 
     {

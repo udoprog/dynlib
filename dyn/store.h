@@ -26,7 +26,7 @@ enum state_t {
 
 #include <sys/types.h>
 
-typedef struct dstore_s
+typedef struct d_store_s
 {
   /* allocation position */
   size_t        d_pos;
@@ -41,54 +41,54 @@ typedef struct dstore_s
   /* state, if open as stream for example. */
   enum state_t  d_state;
 }
-dstore;
+d_store;
 
 typedef struct dstream_s
 {
   size_t              ss_pos;
   char                *ss_pointer;
-  dstore              *ds;
+  d_store              *ds;
   short unsigned int  ss_closed;
 }
 dstream;
 
 void
-ds_init(dstore *);
+d_store_init(d_store *);
 
 void
-ds_free(dstore *);
+d_store_free(d_store *);
 
 void *
-ds_get(dstore *, size_t);
+d_store_get(d_store *, size_t);
 
 size_t
-ds_size(dstore *);
+d_store_size(d_store *);
 
 size_t
-ds_stream_size(dstream *);
+d_store_stream_size(dstream *);
 
 /**
- * ds_stream_init - Initiate a dynamic storage stream.
+ * d_store_stream_init - Initiate a dynamic storage stream.
  * @1 - the dynamic storage to initiate the stream against.
  * @2 - pointer to a stream to initiate.
  */
 dstream *
-ds_stream_init(dstore *, dstream *);
+d_store_stream_init(d_store *, dstream *);
 
 /**
- * ds_stream_write - Write data to a dynamic storage stream.
+ * d_store_stream_write - Write data to a dynamic storage stream.
  * @1 - the dynamic storage stream which governs the data.
  * @2 - the actual string to write.
  * @3 - the length of the string to write.
  */
 void
-ds_stream_write(dstream *, const char *, size_t);
+d_store_stream_write(dstream *, const char *, size_t);
 
 /**
- * ds_stream_close - Close a dynamic storage stream.
+ * d_store_stream_close - Close a dynamic storage stream.
  *
  */
 char *
-ds_stream_close(dstream *);
+d_store_stream_close(dstream *);
 
 #endif /* _DYN_STORE_ */

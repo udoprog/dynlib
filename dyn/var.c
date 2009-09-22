@@ -1,15 +1,15 @@
 #include "dyn/var.h"
 
 void
-ds_var_init(ds, dv, dt, n)
-  dstore      *ds;
-  dvar        *dv;
+d_var_init(ds, dv, dt, n)
+  d_store      *ds;
+  d_var        *dv;
   enum dtype  dt;
   size_t      n;
 {
   switch(dt)
   {
-    case String: ++n, v_pointer(*dv) = ds_get(ds, n); break;
+    case String: ++n, v_pointer(*dv) = d_store_get(ds, n); break;
     /** other types need no allocation **/
     case Integer: n = sizeof(int);    break;
     case Decimal: n = sizeof(double); break;
